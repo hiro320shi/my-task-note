@@ -1,24 +1,31 @@
-# Compiled class file
+# ビルド成果物
+target/
+build/
+out/
 *.class
 
-# Log file
-*.log
-
-# BlueJ files
-*.ctxt
-
-# Mobile Tools for Java (J2ME)
-.mtj.tmp/
-
-# Package Files #
+# パッケージファイル（Maven/Gradle が生成）
 *.jar
 *.war
-*.nar
 *.ear
-*.zip
-*.tar.gz
-*.rar
 
-# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
+# ログや一時ファイル
+*.log
+*.tmp
+*.ctxt
 hs_err_pid*
 replay_pid*
+
+# IDE / エディタ
+.idea/
+*.iml
+*.ipr
+*.iws
+.project
+.classpath
+.settings/
+.vscode/
+
+# OS依存ファイル
+.DS_Store
+Thumbs.db
