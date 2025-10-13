@@ -36,6 +36,11 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.security:spring-security-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+    // AWS SDK v2（Secrets Manager + Core）
+    implementation platform('software.amazon.awssdk:bom:2.25.54')
+    implementation 'software.amazon.awssdk:secretsmanager'
+    implementation 'software.amazon.awssdk:auth'
 }
 
 tasks.named('test') {

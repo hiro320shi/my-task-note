@@ -14,10 +14,15 @@
         dialect: org.hibernate.dialect.MySQL8Dialect
         format_sql: true
     open-in-view: false
+# Secrets Manager 設定
+aws:
+  region: ap-northeast-1
+  secrets:
+    dbSecretName: mytasknote/db/aurora
 management:
   endpoints:
     web:
       exposure:
-        include: "health,info"
+        include: "health,info,metrics"
 server:
   port: 8080
