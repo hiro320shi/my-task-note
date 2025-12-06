@@ -1,35 +1,95 @@
 package com.example.mytasknote.domain.entity;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-@Entity @Table(name = "tasks")
-@Getter @Setter
+@Entity
+@Table(name = "tasks")
 public class Task {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(optional=false, fetch=FetchType.LAZY)
-    @JoinColumn(name="user_id")
+    // ログインユーザとの紐付け
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @Column(nullable=false, length=200)
+    @Column(nullable = false, length = 255)
     private String title;
 
-    @Lob
+    @Column(length = 1000)
     private String description;
-
-    @Column(nullable=false, length=10)
-    private String status; // 'TODO'|'DOING'|'DONE'
 
     private LocalDate dueDate;
 
-    @Column(name="created_at", nullable=false)
+    @Column(nullable = false)
+    private boolean completed = false;
+
+    @Column(name = "created_at", nullable = false, updatable = false, insertable = false)
     private LocalDateTime createdAt;
 
-    @Column(name="updated_at")
+    @Column(name = "updated_at", insertable = false)
     private LocalDateTime updatedAt;
+
+    // ----- getter / setter -----
+
+    public Long getId() {
+        return id;
+    }
+
+    // id は自動採番なので setter は省略してもOKだが、テストで使うなら置いてもよい
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public LocalDate getDueDate() {
+        return dueDate;
+    }
+
+    public void setDueDate(LocalDate dueDate) {
+        this.dueDate = dueDate;
+    }
+
+    public boolean isCompleted() {
+        return completed;
+    }
+
+    public void setCompleted(boolean completed) {
+        this.completed = completed;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
 }

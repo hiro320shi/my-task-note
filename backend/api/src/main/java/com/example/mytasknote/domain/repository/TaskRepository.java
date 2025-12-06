@@ -1,10 +1,16 @@
 package com.example.mytasknote.domain.repository;
 
 import com.example.mytasknote.domain.entity.Task;
-import com.example.mytasknote.domain.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
+
 import java.util.List;
+import java.util.Optional;
 
 public interface TaskRepository extends JpaRepository<Task, Long> {
-    List<Task> findByUserOrderByCreatedAtDesc(User user);
+
+    // ログインユーザごとのタスク取得
+    List<Task> findByUserUsernameOrderByCreatedAtDesc(String username);
+
+    // 更新/削除のときに「自分のタスクか」をチェックする用
+    Optional<Task> findByIdAndUserUsername(Long id, String username);
 }
