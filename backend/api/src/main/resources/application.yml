@@ -26,3 +26,7 @@ management:
         include: "health,info,metrics"
 server:
   port: 8080
+security:
+  jwt:
+    secret: "change-this-to-long-random-string-32chars-minimum"
+    expiration-ms: 3600000  # 1時間

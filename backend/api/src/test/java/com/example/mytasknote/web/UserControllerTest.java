@@ -1,8 +1,11 @@
 package com.example.mytasknote.web;
 
+import com.example.mytasknote.config.JwtAuthenticationFilter;
 import com.example.mytasknote.domain.entity.User;
+import com.example.mytasknote.domain.repository.UserRepository;
 import com.example.mytasknote.domain.service.DuplicateUsernameException;
 import com.example.mytasknote.domain.service.UserService;
+import com.example.mytasknote.web.UserController;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -29,6 +32,12 @@ class UserControllerTest {
 
     @MockBean
     UserService userService;
+
+    @MockBean
+    UserRepository userRepository;
+
+    @MockBean
+    JwtAuthenticationFilter jwtAuthenticationFilter;
 
     @Test
     void register_success_returns201() throws Exception {

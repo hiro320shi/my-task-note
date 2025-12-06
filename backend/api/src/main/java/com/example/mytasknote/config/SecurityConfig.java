@@ -9,31 +9,38 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.web.SecurityFilterChain;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+import com.example.mytasknote.config.JwtAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
 
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
-                // 開発中はとりあえず CSRF 無効（あとでちゃんと考える）
-                .csrf(AbstractHttpConfigurer::disable)
-                // URL ごとのアクセス制御
-                .authorizeHttpRequests(auth -> auth
-                        // ヘルスチェックは誰でもOK
-                        .requestMatchers("/actuator/health").permitAll()
-                        // ユーザ登録は認証不要
-                        .requestMatchers(HttpMethod.POST, "/api/users").permitAll()
-                        // 他は一旦全部許可（後で認証必須に変える）
-                        .anyRequest().permitAll()
-                )
-                // フォームログイン / Basic 認証は今回使わないので無効化
-                .formLogin(AbstractHttpConfigurer::disable)
-                .httpBasic(AbstractHttpConfigurer::disable);
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
-        return http.build();
+    public SecurityConfig(JwtAuthenticationFilter jwtAuthenticationFilter) {
+        this.jwtAuthenticationFilter = jwtAuthenticationFilter;
     }
+
+@Bean
+public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    http
+            .csrf(AbstractHttpConfigurer::disable)
+            .authorizeHttpRequests(auth -> auth
+                    .requestMatchers("/actuator/health").permitAll()
+                    .requestMatchers(HttpMethod.POST, "/api/users").permitAll()
+                    .requestMatchers(HttpMethod.POST, "/api/login").permitAll()
+                    // ★ その他は認証必須
+                    .anyRequest().authenticated()
+            )
+            .formLogin(AbstractHttpConfigurer::disable)
+            .httpBasic(AbstractHttpConfigurer::disable)
+            .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+
+    return http.build();
+}
+
 
     @Bean
     public PasswordEncoder passwordEncoder() {
