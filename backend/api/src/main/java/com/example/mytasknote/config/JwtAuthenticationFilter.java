@@ -1,18 +1,19 @@
 package com.example.mytasknote.config;
 
-import com.example.mytasknote.domain.service.JwtService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import com.example.mytasknote.domain.service.JwtService;
+
 import java.io.IOException;
+import java.util.List;
 
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
@@ -30,29 +31,40 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             FilterChain filterChain
     ) throws ServletException, IOException {
 
-        String header = request.getHeader("Authorization");
-        String token = null;
+        String path = request.getRequestURI();
 
-        // "Bearer xxx" 形式のトークンを取り出す
-        if (StringUtils.hasText(header) && header.startsWith("Bearer ")) {
-            token = header.substring(7);
+        // ★ ログインやユーザ登録、ヘルスチェックは JWT チェックをスキップ
+        if (path.equals("/api/login")
+                || (path.equals("/api/users") && "POST".equals(request.getMethod()))
+                || path.equals("/actuator/health")) {
+            filterChain.doFilter(request, response);
+            return;
         }
 
-        if (token != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            try {
-                // トークン検証＆subject(username)取得
-                String username = jwtService.validateAndGetSubject(token);
+        String authHeader = request.getHeader("Authorization");
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            // JWT なし → SecurityConfig 側で 401/403 にされる
+            filterChain.doFilter(request, response);
+            return;
+        }
 
-                // とりあえず権限は空のまま
-                UsernamePasswordAuthenticationToken authToken =
-                        new UsernamePasswordAuthenticationToken(username, null, java.util.List.of());
+        String token = authHeader.substring(7);
 
-                authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+        try {
+            String username = jwtService.validateAndGetSubject(token);
 
-                SecurityContextHolder.getContext().setAuthentication(authToken);
-            } catch (Exception e) {
-                // トークン不正など → 認証情報はセットしない（→後段で401）
-            }
+            // ★ 認証済みとして SecurityContext に載せる
+            var authentication = new UsernamePasswordAuthenticationToken(
+                    username,
+                    null,
+                    // ★ 今後ロールを使うなら ROLE_USER を1つ付けておく
+                    List.of(new SimpleGrantedAuthority("ROLE_USER"))
+            );
+
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+        } catch (Exception ex) {
+            // トークン不正 → 認証情報なしのまま次へ
+            SecurityContextHolder.clearContext();
         }
 
         filterChain.doFilter(request, response);
