@@ -1,6 +1,6 @@
-package main.java.com.example.mytasknote;
+package com.example.mytasknote;
 
-import main.java.com.example.mytasknote.domain.repository.UserRepository;
+import com.example.mytasknote.domain.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;

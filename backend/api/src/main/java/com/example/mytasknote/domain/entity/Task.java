@@ -1,4 +1,4 @@
-package main.java.com.example.mytasknote.domain.entity;
+package com.example.mytasknote.domain.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;

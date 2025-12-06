@@ -1,4 +1,4 @@
-package main.java.com.example.mytasknote.config;
+package com.example.mytasknote.config;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;

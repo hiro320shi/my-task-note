@@ -1,7 +1,7 @@
-package main.java.com.example.mytasknote.domain.repository;
+package com.example.mytasknote.domain.repository;
 
-import main.java.com.example.mytasknote.domain.entity.Task;
-import main.java.com.example.mytasknote.domain.entity.User;
+import com.example.mytasknote.domain.entity.Task;
+import com.example.mytasknote.domain.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 

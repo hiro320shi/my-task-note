@@ -1,25 +1,71 @@
-package main.java.com.example.mytasknote.domain.entity;
+package com.example.mytasknote.domain.entity;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
 import java.time.LocalDateTime;
 
-@Entity @Table(name = "users")
-@Getter @Setter
+@Entity
+@Table(name = "users")
 public class User {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable=false, unique=true, length=100)
+    // username カラム
+    @Column(name = "username", nullable = false, unique = true)
     private String username;
 
-    @Column(nullable=false, length=255)
+    // password カラム
+    @Column(name = "password", nullable = false)
     private String password;
 
-    @Column(name="display_name", length=100)
+    // display_name カラム
+    @Column(name = "display_name")
     private String displayName;
 
-    @Column(name="created_at", nullable=false)
+    // created_at カラム
+    @Column(name = "created_at", nullable = false, updatable = false, insertable = false)
     private LocalDateTime createdAt;
+
+    // --- getter / setter ---
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getUsername() {          // ★
+        return username;
+    }
+
+    public void setUsername(String username) {  // ★
+        this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getDisplayName() {
+        return displayName;
+    }
+
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
 }
