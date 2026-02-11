@@ -11,7 +11,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import com.example.mytasknote.config.JwtAuthenticationFilter;
+import com.example.mytasknote.auth.jwt.JwtAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
