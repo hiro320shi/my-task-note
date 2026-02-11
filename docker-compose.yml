@@ -10,7 +10,7 @@
       MYSQL_PASSWORD: apppass
       TZ: Asia/Tokyo
     ports:
-      - "3307:3306"   # 競合する場合は "3307:3306" に変更
+      - "3310:3306"   # 競合する場合は "3310:3306" に変更
     command: >
       --default-authentication-plugin=mysql_native_password
       --character-set-server=utf8mb4
