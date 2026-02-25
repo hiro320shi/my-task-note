@@ -148,4 +148,65 @@ class TaskControllerTest {
 
         Mockito.verify(taskService).deleteTask("testuser01", 1L);
     }
+
+    @Test
+    void createTask_returns400_whenTitleBlank() throws Exception {
+        var body = """
+                {
+                "title": "",
+                "description": "説明",
+                "dueDate": "2025-12-31"
+                }
+                """;
+
+        mockMvc.perform(post("/api/tasks")
+                        .principal(() -> "testuser01")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(body))
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.code").value("VALIDATION_ERROR"))
+                .andExpect(jsonPath("$.message").value("Validation failed"))
+                .andExpect(jsonPath("$.errors.title").exists());
+    }
+
+    @Test
+    void updateTask_returns404_whenNotFound() throws Exception {
+        Mockito.when(taskService.updateTask(
+                        ArgumentMatchers.eq("testuser01"),
+                        ArgumentMatchers.eq(999L),
+                        ArgumentMatchers.any(TaskUpdateRequest.class)))
+                .thenThrow(new com.example.mytasknote.common.exception.NotFoundException("Task not found"));
+
+        var body = """
+                {
+                "title": "更新",
+                "description": "更新",
+                "dueDate": "2025-12-31",
+                "completed": true
+                }
+                """;
+
+        mockMvc.perform(put("/api/tasks/999")
+                        .principal(() -> "testuser01")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(body))
+                .andDo(print())
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.code").value("NOT_FOUND"))
+                .andExpect(jsonPath("$.message").value("Task not found"));
+    }
+
+    @Test
+    void deleteTask_returns404_whenNotFound() throws Exception {
+        Mockito.doThrow(new com.example.mytasknote.common.exception.NotFoundException("Task not found"))
+                .when(taskService).deleteTask("testuser01", 999L);
+
+        mockMvc.perform(delete("/api/tasks/999")
+                        .principal(() -> "testuser01"))
+                .andDo(print())
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.code").value("NOT_FOUND"))
+                .andExpect(jsonPath("$.message").value("Task not found"));
+    }
 }

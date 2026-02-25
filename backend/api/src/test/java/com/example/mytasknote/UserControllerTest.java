@@ -103,4 +103,44 @@ class UserControllerTest {
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.message").value("Validation failed"));
     }
+
+    @Test
+    void register_returns409_whenDuplicateUsername() throws Exception {
+        Mockito.when(userService.registerUser(ArgumentMatchers.any()))
+                .thenThrow(new com.example.mytasknote.common.exception.DuplicateUsernameException("dup"));
+
+        var body = """
+                {
+                "username": "dupuser",
+                "password": "password123"
+                }
+                """;
+
+        mockMvc.perform(post("/api/users")   // ★もし /users ならここを変更
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(body))
+                .andDo(print())
+                .andExpect(status().isConflict())
+                .andExpect(jsonPath("$.code").value("DUPLICATE_USERNAME"))
+                .andExpect(jsonPath("$.message").value("Username already exists"));
+    }
+
+    @Test
+    void register_returns400_whenValidationError() throws Exception {
+        var body = """
+                {
+                "username": "",
+                "password": ""
+                }
+                """;
+
+        mockMvc.perform(post("/api/users")   // ★もし /users ならここを変更
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(body))
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.code").value("VALIDATION_ERROR"))
+                .andExpect(jsonPath("$.message").value("Validation failed"))
+                .andExpect(jsonPath("$.errors.username").exists());
+    }
 }

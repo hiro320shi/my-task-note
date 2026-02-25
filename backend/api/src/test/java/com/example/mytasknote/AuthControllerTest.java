@@ -100,4 +100,44 @@ class AuthControllerTest {
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.message").value("Validation failed"));
     }
+
+    @Test
+    void login_returns401_whenBadCredentials() throws Exception {
+        Mockito.when(authService.login(ArgumentMatchers.any()))
+                .thenThrow(new org.springframework.security.authentication.BadCredentialsException("bad"));
+
+        var body = """
+                {
+                "username": "wrong",
+                "password": "wrong"
+                }
+                """;
+
+        mockMvc.perform(post("/api/login")   // ★もし /login ならここを変更
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(body))
+                .andDo(print())
+                .andExpect(status().isUnauthorized())
+                .andExpect(jsonPath("$.code").value("BAD_CREDENTIALS"))
+                .andExpect(jsonPath("$.message").value("Invalid username or password"));
+    }
+
+    @Test
+    void login_returns400_whenValidationError() throws Exception {
+        var body = """
+                {
+                "username": "",
+                "password": ""
+                }
+                """;
+
+        mockMvc.perform(post("/api/login")   // ★もし /login ならここを変更
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(body))
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.code").value("VALIDATION_ERROR"))
+                .andExpect(jsonPath("$.message").value("Validation failed"))
+                .andExpect(jsonPath("$.errors.username").exists());
+    }
 }
