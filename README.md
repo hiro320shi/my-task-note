@@ -1,3 +1,32 @@
+# MyTaskNote API
+
+タスク管理アプリ「MyTaskNote」のバックエンドAPIです。  
+ユーザー登録 → ログイン（JWT）→ タスクCRUD を提供します。
+
+## Tech Stack
+- Java / Spring Boot
+- Spring Web / Spring Validation
+- Spring Security（JWT）
+- MySQL 8.0（Docker）
+- JPA (Hibernate)
+
+## Requirements
+- Java 17+
+- Docker Desktop
+- (任意) Postman
+
+---
+
+## Quick Start（ローカル起動）
+
+### 1) DB起動（Docker）
+`backend/api` 配下で実行します。
+
+```bash
+docker compose up -d
+docker compose ps
+```
+
 # お題
 - 勉強のためにWebアプリをリリースするところまで経験したい
 
