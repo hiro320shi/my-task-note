@@ -50,6 +50,6 @@
 - [X] テストカバレッジ確認
 
 ## 10日目：最終確認 & ドキュメント作成
-- [ ] Postman で API 動作確認
-- [ ] README に API 仕様・Docker 起動手順を記載
-- [ ] Git に最終コミット・プッシュ
+- [X] Postman で API 動作確認
+- [X] README に API 仕様・Docker 起動手順を記載
+- [X] Git に最終コミット・プッシュ
