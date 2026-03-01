@@ -1,10 +1,10 @@
 # 4週目：AWSデプロイ（バックエンド）タスク（1日単位チェックリスト）（9/22～9/28）
 
 ## 1日目：AWS環境準備
-- [ ] AWS CLI と SAM CLI のインストール確認
-- [ ] AWS アカウントと CLI 認証設定
-- [ ] デプロイ用 S3 バケット作成（SAM パッケージ用）
-- [ ] Lambda 用 IAM ロール作成（Aurora 接続権限含む）
+- [X] AWS CLI と SAM CLI のインストール確認
+- [X] AWS アカウントと CLI 認証設定
+- [X] デプロイ用 S3 バケット作成（SAM パッケージ用）
+- [X] Lambda 用 IAM ロール作成（Aurora 接続権限含む）
 
 ## 2日目：Aurora Serverless セットアップ
 - [ ] Aurora Serverless クラスター作成（MySQL 互換）

@@ -1,0 +1,22 @@
+plugins {
+    id 'java'
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'com.amazonaws:aws-lambda-java-core:1.2.2'
+    implementation 'com.amazonaws:aws-lambda-java-events:3.11.0'
+    testImplementation 'junit:junit:4.12'
+    implementation 'com.mysql:mysql-connector-j:8.4.0'
+}
+
+sourceCompatibility = 17
+targetCompatibility = 17
+
+test {
+    useJUnitPlatform()
+    enabled = false
+}
