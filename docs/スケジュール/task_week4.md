@@ -7,10 +7,10 @@
 - [X] Lambda 用 IAM ロール作成（Aurora 接続権限含む）
 
 ## 2日目：Aurora Serverless セットアップ
-- [ ] Aurora Serverless クラスター作成（MySQL 互換）
-- [ ] DB ネットワーク設定（VPC, サブネット, セキュリティグループ）
-- [ ] DB ユーザ・パスワード設定
-- [ ] Secrets Manager に接続情報保存
+- [X] Aurora Serverless クラスター作成（MySQL 互換）
+- [X] DB ネットワーク設定（VPC, サブネット, セキュリティグループ）
+- [X] DB ユーザ・パスワード設定
+- [X] Secrets Manager に接続情報保存
 
 ## 3日目：Spring Boot Lambda パッケージ作成
 - [ ] Spring Boot アプリを AWS Lambda 対応にビルド
